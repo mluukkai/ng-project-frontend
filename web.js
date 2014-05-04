@@ -1,16 +1,7 @@
-  var app, controller, dburl, express, port, server;
+var gzippo = require('gzippo');
+var express = require('express');
+var app = express();
 
-  express = require('express');
-
-  app = express();
-
-  server = require('http').createServer(app);
-
-  app.configure(function() {
-    app.use(express["static"](__dirname + '/dist'));
-    return app.use(express.json()).use(express.urlencoded());
-  });
-
-  port = "5000";
-
-  server.listen(process.env.PORT || port);
+app.use(express.logger('dev'));
+app.use(gzippo.staticGzip("" + __dirname + "/dist"));
+app.listen(process.env.PORT || 5000);
