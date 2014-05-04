@@ -5,6 +5,9 @@ var app = angular.module('frontendApp');
 app.directive('flash', function() {
   return {
       restrict: 'AE',
+      scope: {
+      	message:'='
+      },
       templateUrl: 'views/flash.html'
   };
 });
