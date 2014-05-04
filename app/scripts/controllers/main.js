@@ -5,10 +5,18 @@ var app = angular.module('frontendApp');
 app.directive('flash', function() {
   return {
       restrict: 'AE',
+      replace: true,
       scope: {
       	message:'='
       },
-      templateUrl: 'views/flash.html'
+      templateUrl: 'views/flash.html',
+      link: function(scope, elem, attrs) {
+      	if ( attrs['type']!=undefined) {
+      		elem.addClass('alert-'+attrs['type'])
+      	} else {
+      		elem.addClass('alert-success')
+      	}	
+      }
   };
 });
 
@@ -37,9 +45,9 @@ app.controller('MainCtrl', function ($scope, Blogs) {
     }); 
 
     $scope.createBlog = function() {
-    	//Blogs.create($scope.blog).success(function(data, status, headers, config) {
-    	//	$scope.entries.push(data);
-    	//});
+    	Blogs.create($scope.blog).success(function(data, status, headers, config) {
+    		$scope.entries.push(data);
+    	});
         $scope.flash = "A new blog entry '"+$scope.blog.subject+"'' created"
     	$scope.formVisible = false;
     	$scope.blog = {}
