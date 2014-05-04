@@ -36,9 +36,9 @@
         <h3 class="text-muted">frontend</h3>
       </div>
 
-      <h2>Create a new entry</h2>
+      <h2 ng-click="formVisible = !formVisible">Create a new entry</h2>
 
-      <form>
+      <form ng-show="formVisible">
         name: <input type="text" ng-model="blog.user"></input>        
         <br>
         subject: <input type="text" ng-model="blog.subject"></input>

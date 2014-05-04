@@ -19,14 +19,18 @@ app.factory('Blogs', function($http){
  
 });
 
-app.controller('MainCtrl', function ($scope, $http, Blogs) {
+app.controller('MainCtrl', function ($scope, Blogs) {
+	$scope.formVisible = false;
 
     Blogs.all().success( function(data, status, headers, config) {
     	$scope.entries = data;
     }); 
 
     $scope.createBlog = function() {
-    	console.log("called")
+    	Blogs.create($scope.blog).success(function(data, status, headers, config) {
+    		$scope.entries.push(data);
+    	});
+    	$scope.formVisible = false;
     	$scope.blog = {}
     }
 
