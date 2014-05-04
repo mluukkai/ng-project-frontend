@@ -2,6 +2,13 @@
 
 var app = angular.module('frontendApp');
 
+app.directive('flash', function() {
+  return {
+      restrict: 'AE',
+      templateUrl: 'views/flash.html'
+  };
+});
+
 app.factory('Blogs', function($http){
     var URL = 'http://ng-project-backend.herokuapp.com/api/blogs.json'; 
     var blogsService = {};
@@ -27,10 +34,10 @@ app.controller('MainCtrl', function ($scope, Blogs) {
     }); 
 
     $scope.createBlog = function() {
-    	Blogs.create($scope.blog).success(function(data, status, headers, config) {
-    		$scope.entries.push(data);
-    	});
-        $scope.flash = "A new blogentry '"+$scope.blog.subject+"'' created"
+    	//Blogs.create($scope.blog).success(function(data, status, headers, config) {
+    	//	$scope.entries.push(data);
+    	//});
+        $scope.flash = "A new blog entry '"+$scope.blog.subject+"'' created"
     	$scope.formVisible = false;
     	$scope.blog = {}
     }
