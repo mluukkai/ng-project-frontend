@@ -1,15 +1,33 @@
 'use strict';
 
-var app = angular.module('frontendApp')
-  
-app.controller('MainCtrl', function ($scope, $http) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+var app = angular.module('frontendApp');
 
-    $http.get('http://localhost:3000/api/blogs.json').success( function(data, status, headers, config) {
-    	console.log(data)
-    });
+app.factory('Blogs', function($http){
+    var URL = 'http://ng-project-backend.herokuapp.com/api/blogs.json'; 
+    var blogsService = {};
+    
+    blogsService.all = function(){
+    	return $http.get(URL)	
+    } 
+
+    blogsService.create = function(data){
+    	console.log("called")
+    	return $http.post(URL, data)	
+    } 
+
+    return blogsService;
+ 
+});
+
+app.controller('MainCtrl', function ($scope, $http, Blogs) {
+
+    Blogs.all().success( function(data, status, headers, config) {
+    	$scope.entries = data;
+    }); 
+
+    $scope.createBlog = function() {
+    	console.log("called")
+    	$scope.blog = {}
+    }
+
 });
