@@ -55,10 +55,12 @@
 
       <h2>Blog entries</h2>
 
+      <input placeholder="write somthing to filter entries" class="form-control" ng-model="criteria"></input>
+
       <div>
-        <div ng-repeat="entry in entries">
+        <div ng-repeat="entry in entries | filter:criteria| orderBy:'id':true">
           <h4>{{entry.subject}} by {{entry.user}} </h4>
-              
+
           <blockquote>
             {{entry.body}}
           </blockquote>    
