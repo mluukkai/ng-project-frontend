@@ -30,6 +30,7 @@ app.controller('MainCtrl', function ($scope, Blogs) {
     	Blogs.create($scope.blog).success(function(data, status, headers, config) {
     		$scope.entries.push(data);
     	});
+        $scope.flash = "A new blogentry '"+$scope.blog.subject+"'' created"
     	$scope.formVisible = false;
     	$scope.blog = {}
     }
