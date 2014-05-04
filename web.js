@@ -6,7 +6,7 @@ app.use(express.logger('dev'));
 app.use(gzippo.staticGzip("" + __dirname + "/dist"));
 
 app.get('/', function(request, response) {
-    response.sendfile(__dirname + '/dist/index.html');
+    response.sendfile(__dirname + '../dist/index.html');
 }).configure(function() {
     app.use('/', express.static(__dirname + '/dist/'));
 });
