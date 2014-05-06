@@ -36,6 +36,19 @@
         <h3 class="text-muted">TKTLng</h3>
       </div>
 
+      <form ng-hide="loggedIn.status" ng-submit="login()">
+        <input ng-model="credentials.user" placeholder="username"/>
+        <input ng-model="credentials.password" placeholder="password"/>
+        <button>login</button>
+      </form>
+
+      <form ng-show="loggedIn.status">
+        {{loggedIn.user}} 
+        <button ng-click="logout()">logout</button>
+      </form>
+
+      <button ng-click="do()">do</button>
+
       <flash message='flash' type='success'>
       </flash>
 
@@ -62,7 +75,14 @@
 
       <div>
         <div ng-repeat="entry in entries | filter:criteria| orderBy:'id':true">
-          <h4>{{entry.subject}} by {{entry.user}} </h4>
+          <h4>
+            {{entry.subject}} by {{entry.user}} 
+            <span 
+              style="float:right" 
+              ng-click="deleteBlog(entry)" 
+              class="glyphicon glyphicon-trash">
+            </span>
+          </h4>
 
           <blockquote>
             {{entry.body}}
