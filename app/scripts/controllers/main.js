@@ -2,18 +2,11 @@
 
 var app = angular.module('frontendApp');
 
-app.factory('myHttpInterceptor', function($q) {
+app.factory('loginInterceptor', function($q, $rootScope) {
     return {
-     'response': function(response) {
-        console.log(response.status)
-
-        return response;
-      },
      'responseError': function(response) {
-        console.log(response.status)
         if (response.status==401) {
-          alert('login, durak')
-          return (response);
+          $rootScope.modal.visible = true
         }
 
         return $q.reject(response);
@@ -22,7 +15,23 @@ app.factory('myHttpInterceptor', function($q) {
   });
 
 app.config(function($httpProvider) {
-  $httpProvider.interceptors.push('myHttpInterceptor')
+  $httpProvider.interceptors.push('loginInterceptor')
+});
+
+app.directive('modal', function() {
+  return {
+    restrict: 'E',
+    controller: function($scope, Auth){
+      $scope.hideModal = function() {
+        scope.modal.visible = false;
+      };
+      $scope.login = function(){
+        Auth.login($scope.credentials)
+        $scope.modal.visible = false;
+      }
+    },
+    templateUrl: 'views/modal.html',
+  };
 });
 
 app.directive('flash', function() {
@@ -48,10 +57,6 @@ app.factory('Auth', function($http){
     var service = {};
 
     service.logged = {}; 
-
-    service.do = function() {
-      return $http.get(URL+"s")
-    }
 
     service.login = function(credentials) {
       return $http.post(URL, credentials).then(
@@ -99,7 +104,7 @@ app.factory('Blogs', function($http){
     return blogsService;
 });
 
-app.controller('MainCtrl', function ($scope, $http, Blogs, Auth) {
+app.controller('MainCtrl', function ($rootScope, $scope, $http, Blogs, Auth) {
     $scope.formVisible = false;
     $scope.loggedIn = Auth.logged;
 
@@ -107,24 +112,14 @@ app.controller('MainCtrl', function ($scope, $http, Blogs, Auth) {
     	$scope.entries = data;
     }); 
 
-    $scope.do = function(){
-      Auth.do().then(
-        function (d) {
-          console.log("yes")
-          console.log(d.data)
-        },function (d) {
-          console("not")
-          console.log(d.data)
-        } 
-      )
-    }
+    $rootScope.modal = {}
+    $rootScope.modal.visible = false;
 
     $scope.deleteBlog = function(entry) { 
       Blogs.delete(entry).success(function(){
         var index = $scope.entries.indexOf(entry)
         $scope.entries.splice(index, 1);
       }).error(function(){
-        alert('you should be logged in')
       });
     }
 

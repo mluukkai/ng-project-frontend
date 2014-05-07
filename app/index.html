@@ -32,22 +32,14 @@
           <li class="active"><a ng-href="#">Home</a></li>
           <li><a ng-href="#">About</a></li>
           <li><a ng-href="#">Contact</a></li>
+          <li ng-show="loggedIn.status">
+            <a ng-click="logout()" ng-href="#">Logout</a>
+          </li>
           </ul>
         <h3 class="text-muted">TKTLng</h3>
       </div>
 
-      <form ng-hide="loggedIn.status" ng-submit="login()">
-        <input ng-model="credentials.user" placeholder="username"/>
-        <input ng-model="credentials.password" placeholder="password"/>
-        <button>login</button>
-      </form>
-
-      <form ng-show="loggedIn.status">
-        {{loggedIn.user}} 
-        <button ng-click="logout()">logout</button>
-      </form>
-
-      <button ng-click="do()">do</button>
+      <modal/></modal>
 
       <flash message='flash' type='success'>
       </flash>
