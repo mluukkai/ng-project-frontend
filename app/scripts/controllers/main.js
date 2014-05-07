@@ -4,33 +4,24 @@ var app = angular.module('frontendApp');
 
 app.factory('myHttpInterceptor', function($q) {
     return {
-      'response': function(response) {
-        console.log('XXX')
+     'response': function(response) {
+        console.log(response.status)
+
         return response;
       },
+     'responseError': function(response) {
+        console.log(response.status)
+        if (response.status==401) {
+          alert('login, durak')
+          return (response);
+        }
 
-      // optional method
-     'responseError': function(rejection) {
-        return $q.reject(rejection);
+        return $q.reject(response);
       }
     };
   });
 
-var interc = {
-        response: function(response) { 
-          console.log('pyyntö')
-          return response; 
-        },
-        responseError: function(response) { 
-          console.log('errori')
-          return response; 
-        }
-    }; 
-
 app.config(function($httpProvider) {
-  $httpProvider.interceptors.push(function($q) {
-    return interc;
-  });
   $httpProvider.interceptors.push('myHttpInterceptor')
 });
 
@@ -119,6 +110,10 @@ app.controller('MainCtrl', function ($scope, $http, Blogs, Auth) {
     $scope.do = function(){
       Auth.do().then(
         function (d) {
+          console.log("yes")
+          console.log(d.data)
+        },function (d) {
+          console("not")
           console.log(d.data)
         } 
       )
