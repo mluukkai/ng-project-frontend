@@ -2,6 +2,38 @@
 
 var app = angular.module('frontendApp');
 
+app.factory('myHttpInterceptor', function($q) {
+    return {
+      'response': function(response) {
+        console.log('XXX')
+        return response;
+      },
+
+      // optional method
+     'responseError': function(rejection) {
+        return $q.reject(rejection);
+      }
+    };
+  });
+
+var interc = {
+        response: function(response) { 
+          console.log('pyyntö')
+          return response; 
+        },
+        responseError: function(response) { 
+          console.log('errori')
+          return response; 
+        }
+    }; 
+
+app.config(function($httpProvider) {
+  $httpProvider.interceptors.push(function($q) {
+    return interc;
+  });
+  $httpProvider.interceptors.push('myHttpInterceptor')
+});
+
 app.directive('flash', function() {
   return {
       restrict: 'AE',
@@ -27,8 +59,7 @@ app.factory('Auth', function($http){
     service.logged = {}; 
 
     service.do = function() {
-      console.log("do")
-      return $http.get(URL)
+      return $http.get(URL+"s")
     }
 
     service.login = function(credentials) {
@@ -97,6 +128,8 @@ app.controller('MainCtrl', function ($scope, $http, Blogs, Auth) {
       Blogs.delete(entry).success(function(){
         var index = $scope.entries.indexOf(entry)
         $scope.entries.splice(index, 1);
+      }).error(function(){
+        alert('you should be logged in')
       });
     }
 
@@ -127,3 +160,4 @@ app.controller('MainCtrl', function ($scope, $http, Blogs, Auth) {
     }
 
 });
+
