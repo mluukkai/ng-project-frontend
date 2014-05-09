@@ -69,7 +69,7 @@ app.factory('Auth', function($http){
       )  
     } 
 
-    service.logout = function(credentials) {
+    service.logout = function() {
       return $http.delete(URL).then(
         function () {
           service.logged.status = false;
